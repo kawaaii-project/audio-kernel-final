@@ -3496,6 +3496,9 @@ int adm_open(int port_id, int path, int rate, int channel_mode, int topology,
 		if (!ret) {
 			pr_err("%s: ADM open timedout for port_id: 0x%x for [0x%x]\n",
 						__func__, tmp_port, port_id);
+			if (AFE_PORT_ID_USB_RX == port_id) {
+				is_usb_timeout = true;
+			}
 			return -EINVAL;
 		} else if (atomic_read(&this_adm.copp.stat
 					[port_idx][copp_idx]) > 0) {
