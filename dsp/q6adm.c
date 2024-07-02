@@ -751,8 +751,6 @@ int adm_set_stereo_to_custom_stereo(int port_id, int copp_idx,
 	if (!rc) {
 		pr_err("%s: Set params timed out port = 0x%x\n", __func__,
 			port_id);
-		if (AFE_PORT_ID_USB_RX == port_id)
-			is_usb_timeout = true;
 		rc = -EINVAL;
 		goto set_stereo_to_custom_stereo_return;
 	} else if (atomic_read(&this_adm.copp.stat
@@ -3496,6 +3494,9 @@ int adm_open(int port_id, int path, int rate, int channel_mode, int topology,
 		if (!ret) {
 			pr_err("%s: ADM open timedout for port_id: 0x%x for [0x%x]\n",
 						__func__, tmp_port, port_id);
+			if (AFE_PORT_ID_USB_RX == port_id) {
+				is_usb_timeout = true;
+			}
 			return -EINVAL;
 		} else if (atomic_read(&this_adm.copp.stat
 					[port_idx][copp_idx]) > 0) {
